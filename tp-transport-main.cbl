@@ -1,4 +1,4 @@
-       program-id. pg-tp-transport.
+       program-id. tp-transport-main.
 
        data division.
        01 choix pic 9 value 0.
@@ -68,13 +68,25 @@
            accept s-plg-choix.
 
            evaluate choix
-               When 1 perform CHAUFFEURS
-               When 2 perform AFFECTATIONS
-               When 3 perform DISPONIBILITES
-               When 4 perform RECAPITULATIF
-               When 9 perform QUITTER
-               When other perform ERR-CHOIX
+               when 1 perform CHAUFFEURS
+               when 2 perform AFFECTATIONS
+               when 3 perform DISPONIBILITES
+               when 4 perform RECAPITULATIF
+               when 9 perform QUITTER
+               when other perform ERR-CHOIX
            end-evaluate.
+
+       FICHE-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'afficher-chauffeurs'
+           perform QUITTER.
+
+       MODIF-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'modifier-chauffeurs'
+           perform QUITTER.
+
+       LISTE-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'ss-lister-chauffeurs'
+           perform QUITTER.
 
        CHAUFFEURS.
            display a-plg-titre.
@@ -82,6 +94,14 @@
            display a-plg-menu-chauff.
            display s-plg-choix.
            accept s-plg-choix.
+
+           evaluate choix
+               when 1 perform FICHE-CHAUFFEUR
+               when 2 perform MODIF-CHAUFFEUR
+               when 3 perform LISTE-CHAUFFEUR
+               when 9 perform MENU-PPAL
+               when other perform ERR-CHOIX
+           end-evaluate.
 
        AFFECTATIONS.
            display a-plg-titre.
@@ -112,4 +132,4 @@
            move 'Erreur : choix impossible !' to mess-erreur.
            display a-plg-erreur.
 
-       end program pg-tp-transport.
+       end program tp-transport-main.
