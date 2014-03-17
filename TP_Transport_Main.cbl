@@ -69,13 +69,22 @@
            accept s-plg-choix.
 
            evaluate choix
-               When 1 perform CHAUFFEURS
-               When 2 perform AFFECTATIONS
-               When 3 perform DISPONIBILITES
-               When 4 perform RECAPITULATIF
-               When 9 perform QUITTER
-               When other perform ERR-CHOIX
+               when 1 perform CHAUFFEURS
+               when 2 perform AFFECTATIONS
+               when 3 perform DISPONIBILITES
+               when 4 perform RECAPITULATIF
+               when 9 perform QUITTER
+               when other perform ERR-CHOIX
            end-evaluate.
+
+       FICHE-CHAUFFEUR.
+           perform QUITTER.
+
+       MODIF-CHAUFFEUR.
+           perform QUITTER.
+
+       LISTE-CHAUFFEUR.
+           perform QUITTER.
 
        CHAUFFEURS.
            display a-plg-titre.
@@ -83,6 +92,14 @@
            display a-plg-menu-chauff.
            display s-plg-choix.
            accept s-plg-choix.
+
+           evaluate choix
+               when 1 perform FICHE-CHAUFFEUR
+               when 2 perform MODIF-CHAUFFEUR
+               when 3 perform LISTE-CHAUFFEUR
+               when 9 perform MENU-PPAL
+               when other perform ERR-CHOIX
+           end-evaluate.
 
        AFFECTATIONS.
            display a-plg-titre.
