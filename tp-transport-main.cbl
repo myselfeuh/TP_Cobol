@@ -1,4 +1,4 @@
-       program-id. pg-tp-transport.
+       program-id. tp-transport-main.
 
        data division.
        01 choix pic 9 value 0.
@@ -86,7 +86,7 @@
            perform QUITTER.
 
        LISTE-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'lister-chauffeurs'
+      * a modifier en appelant le sous programme 'ss-lister-chauffeurs'
            perform QUITTER.
 
        CHAUFFEURS.
@@ -133,4 +133,4 @@
            move 'Erreur : choix impossible !' to mess-erreur.
            display a-plg-erreur.
 
-       end program pg-tp-transport.
+       end program tp-transport-main.
