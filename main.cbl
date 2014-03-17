@@ -55,7 +55,6 @@
            02 line 4 col 13 value '! FIN DU PROGRAMME !'.
 
        procedure division.
-           display a-plg-titre.
            set choix-ok to false
            perform with test after until choix-ok
                perform MENU-PPAL
@@ -64,6 +63,7 @@
        goback.
 
        MENU-PPAL.
+           display a-plg-titre.
            display a-plg-menu-ppal.
            display s-plg-choix.
            accept s-plg-choix.
