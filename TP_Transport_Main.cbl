@@ -6,7 +6,6 @@
        01 choix-statut pic 9.
            88 choix-ok value 1 false 0.
 
-
        screen section.
        01 a-plg-titre.
            02 blank screen.
