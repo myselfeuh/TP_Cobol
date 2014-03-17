@@ -78,12 +78,15 @@
            end-evaluate.
 
        FICHE-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'afficher-chauffeurs'
            perform QUITTER.
 
        MODIF-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'modifier-chauffeurs'
            perform QUITTER.
 
        LISTE-CHAUFFEUR.
+      * a modifier en appelant le sous programme 'lister-chauffeurs'
            perform QUITTER.
 
        CHAUFFEURS.
