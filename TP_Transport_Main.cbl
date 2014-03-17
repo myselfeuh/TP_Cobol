@@ -52,7 +52,7 @@
        01 a-efface-erreur.
            02 line 22 blank line.
        01 a-fin-programme.
-           02 line 4 col 13 value 'FIN DU PROGRAMME'.
+           02 line 4 col 13 value '! FIN DU PROGRAMME !'.
 
        procedure division.
            display a-plg-titre.
