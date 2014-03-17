@@ -1,4 +1,4 @@
-       program-id. tp-transport-main.
+       program-id. main.
 
        data division.
        01 choix pic 9 value 0.
@@ -132,4 +132,4 @@
            move 'Erreur : choix impossible !' to mess-erreur.
            display a-plg-erreur.
 
-       end program tp-transport-main.
+       end program main.
