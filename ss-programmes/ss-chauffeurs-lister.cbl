@@ -33,9 +33,8 @@
            02 line 3 col 1 value 'Salut, vous etes dans le '
           & 'sous-programme ss-chauffeurs-lister.'.
        01 a-plg-menu.
-           02 line 5 col 1 value '1-Afficher la liste de tous les '
-          & 'chauffeurs'.
-           02 line 6 col 1 value '9-Retour au menu principal'.
+           02 line 18 col 1 value '1-Afficher les chauffeurs suivants'.
+           02 line 19 col 1 value '9-Retour au menu principal'.
        01 a-plg-afficher.
            02 line 10 col 1 value 'Liste des chauffeurs...'.
 
@@ -50,13 +49,16 @@
 
        procedure division.
            display a-plg-titre
+           display a-plg-accueil
+           perform AFFICHER
+
            set choix-ok to false
            perform with test after until choix-ok
                display a-plg-menu
                display s-plg-choix
                accept s-plg-choix
                evaluate choix
-                   when 1 perform AFFICHER
+                   when 1 perform AFFICHER-SUITE
                    when 9 set choix-ok to true
                    when other perform ERR-CHOIX
                end-evaluate
@@ -65,9 +67,15 @@
        .
 
        AFFICHER.
-      * A completer avec l'affichage de tous les chauffeurs
-       display a-plg-afficher
+      * A completer avec l'affichage des 10 premiers chauffeurs
+           display a-plg-afficher
        .
+
+       AFFICHER-SUITE.
+      * A completer avec l'affichage des 10 chauffeurs suivants
+           display a-plg-afficher
+       .
+
        ERR-CHOIX.
            move 'Erreur : choix impossible !' to mess-erreur
            display a-plg-erreur
