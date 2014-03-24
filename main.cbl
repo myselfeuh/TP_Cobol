@@ -64,25 +64,30 @@
 
        procedure division.
            set choix-ok to false
-           display a-plg-titre.
+           display a-plg-titre
            perform with test after until choix-ok
                perform MENU-PPAL
-           end-perform.
+           end-perform
+       .
 
        goback.
 
        MENU-PPAL.
-           display a-plg-menu-ppal.
-           display s-plg-choix.
-           accept s-plg-choix.
-           evaluate choix
-               when 1 perform CHAUFFEURS
-               when 2 perform AFFECTATIONS
-               when 3 perform DISPONIBILITES
-               when 4 perform RECAPITULATIF
-               when 9 perform QUITTER
-               when other perform ERR-CHOIX
-           end-evaluate.
+           display a-plg-titre
+           perform with test after until choix-ok
+               display a-plg-menu-ppal
+               display s-plg-choix
+               accept s-plg-choix
+               evaluate choix
+                   when 1 perform CHAUFFEURS
+                   when 2 perform AFFECTATIONS
+                   when 3 perform DISPONIBILITES
+                   when 4 perform RECAPITULATIF
+                   when 9 perform QUITTER
+                   when other perform ERR-CHOIX
+               end-evaluate
+           end-perform
+       .
 
        FICHE-CHAUFFEUR.
       * a modifier en appelant le sous programme 'ss-aff-chauffeurs'
@@ -134,18 +139,19 @@
 
        AFFECTATIONS.
            display a-plg-titre
-           set choix-ok to true
-           display a-plg-menu-affect
-           display s-plg-choix
-           accept s-plg-choix
-           evaluate choix
-               when 1 perform CONSULT-AFFECT
-               when 2 perform AJ-AFFECT
-               when 3 perform MODIF-AFFECT
-               when 4 perform SUPPR-AFFECT
-               when 9 perform MENU-PPAL
-               when other perform ERR-CHOIX
-           end-evaluate
+           perform with test after until choix-ok
+               display a-plg-menu-affect
+               display s-plg-choix
+               accept s-plg-choix
+               evaluate choix
+                   when 1 perform CONSULT-AFFECT
+                   when 2 perform AJ-AFFECT
+                   when 3 perform MODIF-AFFECT
+                   when 4 perform SUPPR-AFFECT
+                   when 9 perform MENU-PPAL
+                   when other perform ERR-CHOIX
+               end-evaluate
+           end-perform
        .
 
        LISTE-CHAUFFEURS.
@@ -174,18 +180,19 @@
 
        DISPONIBILITES.
            display a-plg-titre
-           set choix-ok to true
-           display a-plg-menu-dispo
-           display s-plg-choix
-           accept s-plg-choix
-           evaluate choix
-               when 1 perform LISTE-CHAUFFEURS
-               when 2 perform LISTE-BUS
-               when 3 perform TROUVER-CHAUFFEUR
-               when 4 perform TROUVER-DATE
-               when 9 perform MENU-PPAL
-               when other perform ERR-CHOIX
-           end-evaluate
+           perform with test after until choix-ok
+               display a-plg-menu-dispo
+               display s-plg-choix
+               accept s-plg-choix
+               evaluate choix
+                   when 1 perform LISTE-CHAUFFEURS
+                   when 2 perform LISTE-BUS
+                   when 3 perform TROUVER-CHAUFFEUR
+                   when 4 perform TROUVER-DATE
+                   when 9 perform MENU-PPAL
+                   when other perform ERR-CHOIX
+               end-evaluate
+           end-perform
        .
 
        RECAPITULATIF.
@@ -193,13 +200,16 @@
       * appeler le sous-programme 'ss-recap' et stocker le statut dans
       * la variable 'statut-edition'
            display a-plg-recapitulatif
-           display s-plg-choix
-           accept s-plg-choix
-           evaluate choix
-               when 1 perform RECAPITULATIF
-               when 9 perform MENU-PPAL
-               when other perform ERR-CHOIX
-           end-evaluate
+
+           perform with test after until choix-ok
+               display s-plg-choix
+               accept s-plg-choix
+               evaluate choix
+                   when 1 perform RECAPITULATIF
+                   when 9 perform MENU-PPAL
+                   when other perform ERR-CHOIX
+               end-evaluate
+           end-perform
        .
 
        QUITTER.
