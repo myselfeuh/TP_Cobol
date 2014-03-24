@@ -3,16 +3,16 @@
 
        input-output section.
            file-control.
-           select FChauffeurs assign to "chauffeurs\Fchauffeur.dat"
+           select FChauffeurs assign to "Fchauffeur.dat"
                organization is sequential
                status FChauffeursStatus.
 
-           select FChaufNouv assign to "chauffeurs\ChaufNouv.dat"
+           select FChaufNouv assign to "ChaufNouv.dat"
                organization is indexed access dynamic
                    record key is numchaufN
                status FChaufNouvStatus.
 
-           select FAffectation assign to "chauffeurs\Affectation.dat"
+           select FAffectation assign to "Affectation.dat"
                organization is indexed access dynamic
                    record key is numAffect
                    alternate record key is numChaufA with duplicates
@@ -93,7 +93,7 @@
        procedure division.
        open input FChauffeurs
        if FChauffeursStatus not = '00' then
-           display "Erreur lors de l'ouverture du fichier..."
+           display a-error-write
        end-if
 
        open output FChaufNouv
@@ -137,16 +137,6 @@
                        j > 20
                        or numBus(j) = 0000
                    )
-                       compute i = i + 2
-                       display a-plg-affectation-numAffect
-                       compute i = i + 1
-                       display a-plg-affectation-numBus
-                       compute numAffect = numAffect + 1
-                       compute i = i + 1
-                       display a-plg-affectation-dateDebAffect
-                       compute i = i + 1
-                       display a-plg-affectation-dateFinAffect
-
                        move numChaufN to numChaufA
                        move numBus(j) to numBusA
                        move dateDebAffect(j) to dateDebAffectA
@@ -156,6 +146,16 @@
                            invalid key
                                display a-error-write
                        end-write
+
+                       compute i = i + 2
+                       display a-plg-affectation-numAffect
+                       compute i = i + 1
+                       display a-plg-affectation-numBus
+                       compute numAffect = numAffect + 1
+                       compute i = i + 1
+                       display a-plg-affectation-dateDebAffect
+                       compute i = i + 1
+                       display a-plg-affectation-dateFinAffect
 
                        compute j = j + 1
                    end-perform
