@@ -1,11 +1,13 @@
        program-id. main.
 
        data division.
+       working-storage section.
        01 choix pic 9 value 0.
        01 mess-erreur  pic x(100).
        01 choix-statut pic 9.
            88 choix-ok value 1 false 0.
        01 statut-edition pic xx value 'KO'.
+       01 nom-ssprog pic x(40).
 
        screen section.
        01 a-plg-titre.
@@ -90,16 +92,19 @@
        .
 
        FICHE-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-aff-chauffeurs'
+      * a modifier en appelant le sous programme 'ss-chauffeurs-aff'
            perform QUITTER.
 
        MODIF-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-modif-chauffeurs'
+      * a modifier en appelant le sous programme 'ss-chauffeurs-modif'
            perform QUITTER.
 
-       LISTE-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-lister-chauffeurs'
-           perform QUITTER.
+       LISTE-CHAUFFEURS.
+      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
+           move 'ss-programmes/ss-chauffeurs-lister' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
+       .
 
        CHAUFFEURS.
            display a-plg-titre
@@ -110,7 +115,7 @@
                evaluate choix
                    when 1 perform FICHE-CHAUFFEUR
                    when 2 perform MODIF-CHAUFFEUR
-                   when 3 perform LISTE-CHAUFFEUR
+                   when 3 perform LISTE-CHAUFFEURS
                    when 9 perform MENU-PPAL
                    when other perform ERR-CHOIX
                end-evaluate
@@ -118,22 +123,22 @@
        .
 
        CONSULT-AFFECT.
-      * a modifier en appelant le sous programme 'ss-consult-affect'
+      * a modifier en appelant le sous programme 'ss-affect-consult'
            perform QUITTER
        .
 
        MODIF-AFFECT.
-      * a modifier en appelant le sous programme 'ss-modif-affect'
+      * a modifier en appelant le sous programme 'ss-affect-modif'
            perform QUITTER
        .
 
        AJ-AFFECT.
-      * a modifier en appelant le sous programme 'ss-aj-affect'
+      * a modifier en appelant le sous programme 'ss-affect-aj'
            perform QUITTER
        .
 
        SUPPR-AFFECT.
-      * a modifier en appelant le sous programme 'ss-aj-affect'
+      * a modifier en appelant le sous programme 'ss-affect-suppr'
            perform QUITTER
        .
 
@@ -154,20 +159,20 @@
            end-perform
        .
 
-       LISTE-CHAUFFEURS.
-      * a modifier en appelant le sous programme 'ss-lister-chauffeurs'
+       LISTE-CHAUFFEURS-DATE.
+      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
       * mais avec un parametre de date !
            perform QUITTER
        .
 
        LISTE-BUS.
-      * a modifier en appelant le sous programme 'ss-lister-bus'
+      * a modifier en appelant le sous programme 'ss-bus-lister'
       * mais avec un parametre de date !
            perform QUITTER
        .
 
        TROUVER-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-lister-chauffeurs'
+      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
       * mais avec un parametre de date et un parametre de bus !
            perform QUITTER
        .
@@ -185,7 +190,7 @@
                display s-plg-choix
                accept s-plg-choix
                evaluate choix
-                   when 1 perform LISTE-CHAUFFEURS
+                   when 1 perform LISTE-CHAUFFEURS-DATE
                    when 2 perform LISTE-BUS
                    when 3 perform TROUVER-CHAUFFEUR
                    when 4 perform TROUVER-DATE
