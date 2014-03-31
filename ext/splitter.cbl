@@ -96,12 +96,12 @@
            display a-error-write
        end-if
 
-       open i-o FChaufNouv
+       open output FChaufNouv
        if FChaufNouvStatus not = '00' then
           display a-error-write
        end-if
 
-       open i-o FAffectation
+       open output FAffectation
        if FAffectationStatus not = '00' then
           display a-error-write
        end-if
