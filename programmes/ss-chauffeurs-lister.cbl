@@ -19,9 +19,9 @@
 
        working-storage section.
        01 FChaufNouvStatus         pic x(2).
-       01 limite                   pic 9(2) value 1.
-       01 fin-fichier              pic 9 value 0.
-       01 i                        pic 9(2) value 5.
+       01 limite                   pic 9(2).
+       01 fin-fichier              pic 9.
+       01 i                        pic 9(2).
 
        screen section.
        01 a-plg-titre-global.
@@ -59,6 +59,9 @@
           display a-error-write
        end-if
 
+       move 5 to i
+       move 1 to limite
+       move 0 to fin-fichier
        move 0 to numChaufN
        start FChaufNouv key > numChaufN
 

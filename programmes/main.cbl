@@ -101,7 +101,7 @@
 
        LISTE-CHAUFFEURS.
       * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
-           move 'ss-programmes/ss-chauffeurs-lister' to nom-ssprog
+           move 'ss-chauffeurs-lister' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
