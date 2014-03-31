@@ -96,16 +96,15 @@
            display a-error-write
        end-if
 
-       open output FChaufNouv
+       open i-o FChaufNouv
        if FChaufNouvStatus not = '00' then
           display a-error-write
        end-if
 
-       open output FAffectation
+       open i-o FAffectation
        if FAffectationStatus not = '00' then
           display a-error-write
        end-if
-
 
       *--- initialise l'index du tableau affectations ---
        move 2 to i.
@@ -170,6 +169,10 @@
                    move 1 to j
            end-read
        end-perform
+
+       display FChaufNouvStatus
+       display FAffectationStatus
+
        close FChauffeurs.
 
        end program parser.
