@@ -1,4 +1,4 @@
-       program-id. ss-chauffeurs-lister.
+       program-id. ss-chauffeurs-afficher.
 
        input-output section.
            file-control.
@@ -26,7 +26,7 @@
        screen section.
        01 a-plg-titre-global.
            02 blank screen.
-           02 line 1 col 10 value '- Chauffeurs, Bus et Compagnie -'.
+           02 line 1 col 10 value "- Affichage d'un chauffeur -".
        01 a-plg-titre-colonne.
            02 line 3 col 2 value 'Id:'.
            02 line 3 col 8 value 'Nom:'.
@@ -110,4 +110,4 @@
            move 1 to limite
        .
 
-       end program ss-chauffeurs-lister.
+       end program ss-chauffeurs-afficher.
