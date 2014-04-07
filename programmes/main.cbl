@@ -128,7 +128,9 @@
 
        CONSULT-AFFECT.
       * a modifier en appelant le sous programme 'ss-affect-consult'
-           perform QUITTER
+           move 'ss-affect-consult' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
        .
 
        MODIF-AFFECT.
