@@ -6,29 +6,27 @@
            organization is indexed
            access mode is dynamic
            record key is num-affect
-           alternate key is num-chauf
+           alternate key is num-chauf with duplicates
+           alternate key is num-bus with duplicates
            status fstatus.
 
        data division.
        file section.
        FD AFFECTATIONS.
        01 ENR-AFFECT.
-           02 num-affect pic 9(4).
-           02 num-chauf pic 9(4).
-           02 num-bus pic 9(4).
-           02 date-debut pic 9(8).
-           02 date-fin pic 9(8).
+           02 num-affect   pic 9(4).
+           02 num-chauf    pic 9(4).
+           02 num-bus      pic 9(4).
+           02 date-debut   pic 9(8).
+           02 date-fin     pic 9(8).
 
        working-storage section.
-       01 choix pic 9 value 0.
-       01 mess-erreur  pic x(100).
-       01 choix-statut pic 9.
-           88 choix-ok value 1 false 0.
-       01 ligne pic 99.
-       01 i pic 99.
+       01 mess-erreur      pic x(100).
+       01 i                pic 99.
+       01 limite           pic 99.
 
        01 finFichierAffect pic 9.
-       01 fstatus pic x(02).
+       01 fstatus          pic x(02).
            88 ok                   value "00".
            88 optionnal-create     value "05".
            88 cle-multiple         value "22".
@@ -48,18 +46,17 @@
            02 line 5 col 15 value 'Num chauf'.
            02 line 5 col 25 value 'Num bus'.
            02 line 5 col 35 value 'Date debut'.
-           02 line 5 col 45 value 'Date fin'.
+           02 line 5 col 46 value 'Date fin'.
        01 a-plg-liste.
-           02 line 4 col 1 value 'Liste des chauffeurs...'.
-           02 line ligne col 1.
+           02 line i col 1.
            02 s-num-affect pic 9(4) from num-affect.
-           02 line ligne col 15.
+           02 line i col 15.
            02 s-num-chauf pic 9(4) from num-chauf.
-           02 line ligne col 25.
+           02 line i col 25.
            02 s-num-bus pic 9(4) from num-bus.
-           02 line ligne col 35.
+           02 line i col 35.
            02 s-date-debut pic 9(8) from date-debut.
-           02 line ligne col 45.
+           02 line i col 46.
            02 s-date-fin pic 9(8) from date-fin.
        01 a-plg-continuer.
            02 line 22 col 1 value 'Appuyez sur une touche pour'
@@ -69,6 +66,7 @@
            02 line 1 col 1.
            02 a-fstatus pic 99 from fstatus.
        01 a-plg-erreur.
+           02 a-fstatus line 1 col 1 pic xx from fstatus.
            02 line 22 col 1.
            02 a-message pic x(100) from mess-erreur.
        01 a-efface-erreur.
@@ -78,42 +76,48 @@
            display a-plg-titre
            display a-plg-accueil
            open input AFFECTATIONS
-           perform AFFICHER-AFFECT
-
+           if fstatus not = '00' then
+               move 'Erreur d''ouverture du fichier...' to mess-erreur
+               display a-plg-erreur
+           else
+               display a-plg-titres-liste
+               move 0 to finFichierAffect
+               move 6 to i
+               move 1 to limite
+               move 0000 to num-affect
+               start AFFECTATIONS key > num-affect
+               if fstatus = '00'
+                   perform until finFichierAffect = 1
+                       read AFFECTATIONS next
+                           at end
+                               move 1 to finFichierAffect
+                               stop ' '
+                               display a-plg-continuer
+                           not at end
+                               display a-plg-liste
+                               add 1 to i
+                               add 1 to limite
+                               if (function mod(limite 11) = 0) then
+                                   display a-plg-continuer
+                                   stop ' '
+                                   perform REINITIALISER
+                               end-if
+                       end-read
+                   end-perform
+               else
+                   move 'Erreur de lecture du fichier...' to mess-erreur
+                   display a-plg-erreur
+                   display a-plg-status
+               end-if
+           end-if
        goback
        .
 
-       AFFICHER-AFFECT.
-      * A completer avec l'affichage des premieres affectations
+       REINITIALISER.
+           display a-plg-titre
            display a-plg-titres-liste
-           move 0 to finFichierAffect
-           move 5 to ligne
-           move 0000 to num-affect
-           start AFFECTATIONS key > num-affect
-           if fstatus = '00'
-               perform until finFichierAffect = 1
-                   read AFFECTATIONS next
-                       at end
-                           move 1 to finFichierAffect
-                           stop ' '
-                           display a-plg-continuer
-                       not at end
-                           display a-plg-liste
-                           add 1 to ligne
-                           add 1 to i
-                           if (function mod(i 3) = 0) then
-                               display a-plg-titre
-                               display a-plg-titres-liste
-                               display a-plg-liste
-                               stop ' '
-                               display a-plg-continuer
-                           end-if
-                   end-read
-               end-perform
-           else
-               move 'Erreur de lecture du fichier...' to mess-erreur
-               display a-plg-erreur
-               display a-plg-status
+           move 6 to i
+           move 1 to limite
        .
 
        end program ss-affect-consult.
