@@ -92,8 +92,12 @@
        .
 
        FICHE-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-chauffeurs-aff'
-           perform QUITTER.
+      * a modifier en appelant le sous programme
+      * 'ss-chauffeurs-afficher'
+           move 'ss-chauffeurs-afficher' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
+       .
 
        MODIF-CHAUFFEUR.
       * a modifier en appelant le sous programme 'ss-chauffeurs-modif'
