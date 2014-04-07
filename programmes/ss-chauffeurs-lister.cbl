@@ -59,36 +59,37 @@
        open input FChaufNouv
        if FChaufNouvStatus not = '00' then
           display a-error-write
-       end-if
+       else
+           move 5 to i
+           move 1 to limite
+           move 0 to fin-fichier
+           move 0 to numChaufN
+           start FChaufNouv key >= numChaufN
 
-       move 5 to i
-       move 1 to limite
-       move 0 to fin-fichier
-       move 0 to numChaufN
-       start FChaufNouv key >= numChaufN
+           display a-plg-titre-global
+           display a-plg-titre-colonne
 
-       display a-plg-titre-global
-       display a-plg-titre-colonne
-
-       perform with test after until (fin-fichier = 1)
-           read FChaufNouv next
-               at end
-                   move 1 to fin-fichier
-                   display a-plg-message-utilisateur
-                   stop ' '
-               not at end
-                   perform AFFICHER
-                   compute i = i + 1
-                   compute limite = function mod(limite 4)
-
-                   if limite = 0 then
+           perform with test after until (fin-fichier = 1)
+               read FChaufNouv next
+                   at end
+                       move 1 to fin-fichier
                        display a-plg-message-utilisateur
                        stop ' '
-                       perform REINITIALISER
-                   end-if
-           end-read
-       end-perform
-       close FChaufNouv.
+                   not at end
+                       perform AFFICHER
+                       compute i = i + 1
+                       compute limite = function mod(limite 4)
+
+                       if limite = 0 then
+                           display a-plg-message-utilisateur
+                           stop ' '
+                           perform REINITIALISER
+                       end-if
+               end-read
+           end-perform
+           close FChaufNouv
+       end-if
+
        goback
        .
 
