@@ -48,7 +48,7 @@
            02 line 20 col 1 value 'Appuyez sur ENTREE pour continuer.'.
        01 a-plg-efface-ecran.
            02 blank screen.
-       01 a-error-write.
+       01 a-error-open.
            02 blank screen.
            02 line 2 col 10 value 'Erreur lors de l''ouverture'
            & 'du fichier...'.
@@ -58,7 +58,7 @@
 
        open input FChaufNouv
        if FChaufNouvStatus not = '00' then
-          display a-error-write
+          display a-error-open
        else
            move 5 to i
            move 1 to limite
@@ -94,18 +94,15 @@
        .
 
        AFFICHER.
-      * A completer avec l'affichage des 10 premiers chauffeurs
+      * Affichage des chauffeurs
            display a-plg-chauffeur-data
            compute limite = limite + 1
        .
 
        REINITIALISER.
-      * TODO
            display a-plg-efface-ecran
-
            display a-plg-titre-global
            display a-plg-titre-colonne
-
            move 5 to i
            move 1 to limite
        .
