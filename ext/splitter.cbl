@@ -10,6 +10,7 @@
            select FChaufNouv assign to "ChaufNouv.dat"
                organization is indexed access dynamic
                    record key is numchaufN
+                   alternate record key is nomN with duplicates
                status FChaufNouvStatus.
 
            select FAffectation assign to "Affectation.dat"

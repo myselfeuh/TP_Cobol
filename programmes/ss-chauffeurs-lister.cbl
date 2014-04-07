@@ -45,12 +45,14 @@
            02 a-datePermisN line i col 36 pic 9(8) from datePermisN.
 
        01 a-plg-message-utilisateur.
-           02 line 20 col 1 value 'Appuyer sur une touche...'.
+           02 line 20 col 1 value 'Appuyez sur ENTREE pour continuer.'.
        01 a-plg-efface-ecran.
            02 blank screen.
        01 a-error-write.
            02 blank screen.
-           02 line 2 col 10 value "Erreur lors de l'écriture...".
+           02 line 2 col 10 value 'Erreur lors de l''ouverture'
+           & 'du fichier...'.
+           02 a-fstatus line 1 col 1 pic x(2) from FChaufNouvStatus.
 
        procedure division.
 
@@ -63,15 +65,12 @@
        move 1 to limite
        move 0 to fin-fichier
        move 0 to numChaufN
-       start FChaufNouv key > numChaufN
+       start FChaufNouv key >= numChaufN
 
        display a-plg-titre-global
        display a-plg-titre-colonne
 
-       perform with test after until (
-           fin-fichier = 1
-           or FChaufNouvStatus = '35'
-       )
+       perform with test after until (fin-fichier = 1)
            read FChaufNouv next
                at end
                    move 1 to fin-fichier
@@ -80,7 +79,6 @@
                not at end
                    perform AFFICHER
                    compute i = i + 1
-
                    compute limite = function mod(limite 4)
 
                    if limite = 0 then
