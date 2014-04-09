@@ -101,7 +101,10 @@
 
        MODIF-CHAUFFEUR.
       * a modifier en appelant le sous programme 'ss-chauffeurs-modif'
-           perform QUITTER.
+           move 'ss-chauffeurs-modif' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
+       .
 
        LISTE-CHAUFFEURS.
       * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
