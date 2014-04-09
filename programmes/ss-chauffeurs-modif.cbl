@@ -64,6 +64,15 @@
            02 s-nom-chauf pic x(30) to nom-chauf
            required.
 
+       01 s-plg-formulaire-chauffeur-r.
+           02 line 3 col 2 value 'Nouveau nom: '.
+           02 s-nv-nom-chauf pic x(30) to nv-nom-chauf required.
+           02 line 4 col 2 value 'Nouveau prenom: '.
+           02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf required.
+           02 line 5 col 2 value 'Nouvelle date de permis: '.
+           02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf required.
+
+
        01 s-plg-formulaire-chauffeur.
            02 line 3 col 2 value 'Nouveau nom: '.
            02 s-nv-nom-chauf pic x(30) to nv-nom-chauf.
@@ -84,10 +93,10 @@
            02 line 20 col 1 value 'Choix invalide.'.
        01 a-plg-chauffeur-introuvable.
            02 line 20 col 1 value 'Chauffeur introuvable.'.
-       01 a-plg-erreur-rewrite.
-           02 line 20 col 1 value 'Modification du chauffeur avortee'.
-       01 a-plg-modif-ok.
-           02 line 20 col 1 value 'Modification du chauffeur effectuee'.
+       01 a-plg-modif-erreur.
+           02 line 20 col 1 value 'Operation avortee'.
+       01 a-plg-modif-succes.
+           02 line 20 col 1 value 'Operation effectuee'.
 
 
        procedure division.
@@ -130,8 +139,31 @@
        AJOUTE.
            perform REINITIALISER
            display a-plg-titre-ajoute
-           display s-plg-formulaire-chauffeur
-           accept s-plg-formulaire-chauffeur
+
+           display s-plg-formulaire-chauffeur-r
+           accept s-plg-formulaire-chauffeur-r
+
+           move 9999 to numChaufN
+           start FChaufNouv key < numChaufN
+
+           read FChaufNouv next
+               at end
+                   display a-plg-modif-erreur
+               not at end
+                   compute numChaufN = numChaufN + 1
+           end-read
+
+           move nv-nom-chauf to nomN
+           move nv-prenom-chauf to prenomN
+           move nv-date-chauf to datePermisN
+
+           write ChaufNouv
+           invalid key
+               display a-plg-modif-erreur
+           not invalid key
+               display a-plg-modif-succes
+           end-write
+
            stop ' '
        .
 
@@ -143,31 +175,50 @@
 
            start FChaufNouv key = numChaufN
 
-              read FChaufNouv
-              invalid key
-                 display a-plg-chauffeur-introuvable
-              not invalid key
-                 display s-plg-formulaire-chauffeur
-                 accept s-plg-formulaire-chauffeur
+           read FChaufNouv
+           invalid key
+               display a-plg-chauffeur-introuvable
+           not invalid key
+               display s-plg-formulaire-chauffeur
+               accept s-plg-formulaire-chauffeur
 
-                 if nv-nom-chauf not = spaces and low-value then
-                   move nv-nom-chauf to nomN
-                 end-if
-                 if nv-prenom-chauf not = spaces and low-value then
-                   move nv-prenom-chauf to prenomN
-                 end-if
-                 if nv-date-chauf not = spaces and low-value then
-                   move nv-date-chauf to datePermisN
-                 end-if
+               if nv-nom-chauf not = spaces and low-value then
+               move nv-nom-chauf to nomN
+               end-if
+               if nv-prenom-chauf not = spaces and low-value then
+               move nv-prenom-chauf to prenomN
+               end-if
+               if nv-date-chauf not = spaces and low-value then
+               move nv-date-chauf to datePermisN
+               end-if
 
-                 rewrite ChaufNouv
-                 invalid key
-                    display a-plg-erreur-rewrite
-                 not invalid key
-                    display a-plg-modif-ok
-                 end-rewrite
-              end-read.
+               rewrite ChaufNouv
+               invalid key
+                   display a-plg-modif-erreur
+               not invalid key
+                   display a-plg-modif-succes
+               end-rewrite
+           end-read.
+
            stop ' '
+       .
+
+       SUPPRIME.
+           display a-plg-titre-supprime
+
+           perform RECHERCHE-CHAUFFEUR
+
+           start FChaufNouv key = numChaufN
+
+           delete FChaufNouv
+           invalid key
+               display a-plg-modif-erreur
+           not invalid key
+               display a-plg-modif-succes
+           end-delete
+
+           stop ' '
+
        .
 
        RECHERCHE-CHAUFFEUR.
