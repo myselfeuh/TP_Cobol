@@ -94,14 +94,14 @@
        FICHE-CHAUFFEUR.
       * a modifier en appelant le sous programme
       * 'ss-chauffeurs-afficher'
-           move 'ss-chauffeurs-afficher' to nom-ssprog
+           move 'ss-chauffeurs-rechercher' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
 
        MODIF-CHAUFFEUR.
       * a modifier en appelant le sous programme 'ss-chauffeurs-modif'
-           move 'ss-chauffeurs-modif' to nom-ssprog
+           move 'ss-chauffeurs-modifier' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .

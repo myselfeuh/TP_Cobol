@@ -57,12 +57,10 @@
 
        01 s-plg-recherche-id.
            02 line 3 col 2 value 'Id du chauffeur: '.
-           02 s-id-chauf pic zzzz to id-chauf
-           required.
+           02 s-id-chauf pic zzzz to id-chauf.
        01 s-plg-recherche-nom.
-           02 line 3 col 2 value 'Nom du chauffeur: '.
-           02 s-nom-chauf pic x(30) to nom-chauf
-           required.
+           02 line 4 col 2 value 'Nom du chauffeur: '.
+           02 s-nom-chauf pic x(30) to nom-chauf.
 
        01 s-plg-formulaire-chauffeur-r.
            02 line 3 col 2 value 'Nouveau nom: '.
@@ -91,6 +89,10 @@
            02 blank screen.
        01 a-plg-message-choix-invalide.
            02 line 20 col 1 value 'Choix invalide.'.
+       01 a-plg-champs-exclusifs.
+           02 line 20 col 1 value "Ne remplissez qu'un seul champs.".
+       01 a-plg-champs-vide.
+           02 line 20 col 1 value 'Remplissez au moins un champs.'.
        01 a-plg-chauffeur-introuvable.
            02 line 20 col 1 value 'Chauffeur introuvable.'.
        01 a-plg-modif-erreur.
@@ -120,7 +122,7 @@
            evaluate choix-action
                when 1 perform AJOUTE
                when 2 perform MODIFIE
-               when 3 perform EFFACE
+               when 3 perform SUPPRIME
                when 9 move 1 to quitter
                when other display a-plg-message-choix-invalide
            end-evaluate
@@ -173,8 +175,6 @@
 
            perform RECHERCHE-CHAUFFEUR
 
-           start FChaufNouv key = numChaufN
-
            read FChaufNouv
            invalid key
                display a-plg-chauffeur-introuvable
@@ -204,11 +204,10 @@
        .
 
        SUPPRIME.
+           perform REINITIALISER
            display a-plg-titre-supprime
 
            perform RECHERCHE-CHAUFFEUR
-
-           start FChaufNouv key = numChaufN
 
            delete FChaufNouv
            invalid key
@@ -218,22 +217,31 @@
            end-delete
 
            stop ' '
-
        .
 
        RECHERCHE-CHAUFFEUR.
+           move 0 to id-chauf
+           move ' ' to nom-chauf
+
            display s-plg-recherche-id
+           display s-plg-recherche-nom
+
            accept s-plg-recherche-id
+           accept s-plg-recherche-nom
 
-           move id-chauf to numChaufN
+           if id-chauf not = 0000 and nom-chauf not = ' ' then
+               display a-plg-champs-exclusifs
+           else if id-chauf = 0 and nom-chauf = ' ' then
+               display a-plg-champs-vide
+           else
+               if id-chauf not = 0 then
+                   move id-chauf to numChaufN
+                   start FChaufNouv key = numChaufN
+               else
+                   move nom-chauf to nomN
+                   start FChaufNouv key = nomN
+               end-if
+           end-if
        .
-
-       EFFACE.
-           perform REINITIALISER
-           display a-plg-titre-supprime
-
-           stop ' '
-       .
-
 
        end program ss-chauffeurs-modif.

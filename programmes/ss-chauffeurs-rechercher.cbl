@@ -21,6 +21,7 @@
        working-storage section.
        01 FChaufNouvStatus         pic x(2).
        01 i                        pic 9(2).
+       01 fin-fichier              pic 9.
        01 choix-type-recherche     pic 9.
        01 quitter                  pic 9.
        01 nom-chauffeur            pic x(30).
@@ -96,46 +97,54 @@
            else
                display a-plg-message-choix-invalide
            end-if
+
+           move 0 to choix-type-recherche
        end-perform
+       close FChaufNouv
        goback
        .
 
        RECHERCHER-PAR-ID.
       *    fonction principale
-           display s-plg-recherche-id.
-           accept s-plg-recherche-id.
+           display s-plg-recherche-id
+           accept s-plg-recherche-id
 
            move id-chauffeur to numChaufN
            start FChaufNouv key = numChaufN
 
-           perform RECHERCHER
+           read FChaufNouv
+               invalid key
+                   display a-plg-message-aucun-resultat
+               not invalid key
+                   display a-plg-chauffeur-data
+           end-read
+
+           stop ' '
        .
+
        RECHERCHER-PAR-NOM.
       *    fonction principale
-           display s-plg-recherche-nom.
-           accept s-plg-recherche-nom.
+           display s-plg-recherche-nom
+           accept s-plg-recherche-nom
 
            move nom-chauffeur to nomN
            start FChaufNouv key = nomN
 
-           perform RECHERCHER
-       .
+           move 0 to fin-fichier
 
-       RECHERCHER.
-      * A completer avec l'affichage des 10 premiers chauffeurs
-           if FChaufNouvStatus = '00'
-              read FChaufNouv
-              display a-plg-chauffeur-data
-           else
-              display a-plg-message-aucun-resultat
-           end-if
-
-           stop ' '
+           read FChaufNouv next
+               at end
+                   move 1 to fin-fichier
+                   stop ' '
+               not at end
+                   display a-plg-chauffeur-data
+                   stop ' '
+           end-read
        .
 
        REINITIALISER.
            display a-plg-efface-ecran
            display a-plg-titre-global
-
+       .
 
        end program ss-chauffeurs-afficher.
