@@ -2,3 +2,7 @@
 
 *.int
 *.~ds
+*.dat
+*.idx
+*.DBK
+*.IBK
