@@ -134,12 +134,16 @@
 
            read FChaufNouv next
                at end
-                   move 1 to fin-fichier
+                   display a-plg-chauffeur-data
                    stop ' '
                not at end
                    display a-plg-chauffeur-data
                    stop ' '
            end-read
+           if FChaufNouvStatus not = '00' then
+               display a-plg-message-aucun-resultat
+               stop ' '
+           end-if
        .
 
        REINITIALISER.
