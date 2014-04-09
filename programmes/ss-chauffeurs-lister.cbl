@@ -6,6 +6,7 @@
                organization is indexed
                access mode is dynamic
                    record key is numChaufN
+                   alternate record key is nomN with duplicates
                status FChaufNouvStatus.
 
        data division.

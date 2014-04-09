@@ -28,7 +28,7 @@
 
        01 nv-nom-chauf             pic x(30).
        01 nv-prenom-chauf          pic x(30).
-       01 nv-date-chauf            pic x(30).
+       01 nv-date-chauf            pic 9(8).
 
        screen section.
        01 a-plg-titre-global.
@@ -49,8 +49,9 @@
            02 line 3 col 2 value '1: Ajouter un chauffeur'.
            02 line 4 col 2 value '2: Modifier un chauffeur'.
            02 line 5 col 2 value '3: Supprimer un chauffeur'.
+           02 line 7 col 2 value '9: Quitter'.
        01 s-plg-fonctionnalites.
-           02 line 7 col 2 value 'Entrez votre choix : '.
+           02 line 9 col 2 value 'Entrez votre choix : '.
            02 s-choix-action pic z to choix-action
            required.
 
@@ -64,14 +65,12 @@
            required.
 
        01 s-plg-formulaire-chauffeur.
-           02 line i col 2 value 'Nouveau nom: '.
-           02 s-nv-nom-chauf pic x(30) to nv-nom-chauf
-           required.
-           02 line i col 2 value 'Nouveau prenom: '.
-           02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf
-           required.
-           02 line i col 2 value 'Nouvelle date de permis: '.
-           02 s-nv-date-chauf pic x(30) to nv-date-chauf required.
+           02 line 3 col 2 value 'Nouveau nom: '.
+           02 s-nv-nom-chauf pic x(30) to nv-nom-chauf.
+           02 line 4 col 2 value 'Nouveau prenom: '.
+           02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf.
+           02 line 5 col 2 value 'Nouvelle date de permis: '.
+           02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf.
 
        01 a-plg-chauffeur-data.
            02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
@@ -83,6 +82,12 @@
            02 blank screen.
        01 a-plg-message-choix-invalide.
            02 line 20 col 1 value 'Choix invalide.'.
+       01 a-plg-chauffeur-introuvable.
+           02 line 20 col 1 value 'Chauffeur introuvable.'.
+       01 a-plg-erreur-rewrite.
+           02 line 20 col 1 value 'Modification du chauffeur avortee'.
+       01 a-plg-modif-ok.
+           02 line 20 col 1 value 'Modification du chauffeur effectuee'.
 
 
        procedure division.
@@ -111,6 +116,9 @@
                when other display a-plg-message-choix-invalide
            end-evaluate
        end-perform
+
+       close FChaufNouv
+
        goback
        .
 
@@ -131,7 +139,42 @@
            perform REINITIALISER
            display a-plg-titre-modifie
 
+           perform RECHERCHE-CHAUFFEUR
+
+           start FChaufNouv key = numChaufN
+
+              read FChaufNouv
+              invalid key
+                 display a-plg-chauffeur-introuvable
+              not invalid key
+                 display s-plg-formulaire-chauffeur
+                 accept s-plg-formulaire-chauffeur
+
+                 if nv-nom-chauf not = spaces and low-value then
+                   move nv-nom-chauf to nomN
+                 end-if
+                 if nv-prenom-chauf not = spaces and low-value then
+                   move nv-prenom-chauf to prenomN
+                 end-if
+                 if nv-date-chauf not = spaces and low-value then
+                   move nv-date-chauf to datePermisN
+                 end-if
+
+                 rewrite ChaufNouv
+                 invalid key
+                    display a-plg-erreur-rewrite
+                 not invalid key
+                    display a-plg-modif-ok
+                 end-rewrite
+              end-read.
            stop ' '
+       .
+
+       RECHERCHE-CHAUFFEUR.
+           display s-plg-recherche-id
+           accept s-plg-recherche-id
+
+           move id-chauf to numChaufN
        .
 
        EFFACE.

@@ -32,9 +32,9 @@
            02 line 1 col 10 value "- Recherche d'un chauffeur -".
 
        01 a-plg-type-recherche.
-           02 line 3 col 2 value '1: recherche par identifiant'.
-           02 line 4 col 2 value '2: recherche par nom'.
-           02 line 6 col 2 value '9: quitter'.
+           02 line 3 col 2 value '1: Recherche par identifiant'.
+           02 line 4 col 2 value '2: Recherche par nom'.
+           02 line 6 col 2 value '9: Quitter'.
        01 s-plg-type-recherche.
            02 line 8 col 2 value 'Entrez votre choix : '.
            02 s-choix-type-recherche pic z to choix-type-recherche
