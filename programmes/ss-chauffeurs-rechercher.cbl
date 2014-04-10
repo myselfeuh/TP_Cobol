@@ -127,7 +127,7 @@
            display s-plg-recherche-nom
            accept s-plg-recherche-nom
 
-           move nom-chauffeur to nomN
+           move function upper-case(nom-chauffeur) to nomN
            start FChaufNouv key = nomN
 
            move 0 to fin-fichier
