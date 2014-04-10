@@ -29,10 +29,13 @@
            02 blank screen.
            02 line 1 col 10 value '- Chauffeurs, Bus et Compagnie -'.
        01 a-plg-titre-colonne.
-           02 line 3 col 2 value 'Id:'.
-           02 line 3 col 8 value 'Nom:'.
-           02 line 3 col 23 value 'Prenom:'.
-           02 line 3 col 36 value 'Date du permis:'.
+           02 line 3 col 2 value 'Id'.
+           02 line 3 col 8 value 'Nom'.
+           02 line 3 col 39 value 'Prenom'.
+           02 line 3 col 69 value 'Date permis'.
+           02 line 4 col 1 value
+           '----------------------------------------------------------'
+               &'---------------------'.
        01 a-plg-menu.
            02 line 18 col 1 value '1-Afficher les chauffeurs suivants'.
            02 line 19 col 1 value '9-Retour au menu principal'.
@@ -42,8 +45,9 @@
        01 a-plg-chauffeur-data.
            02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
            02 a-nomN line i col 8         pic x(30) from nomN.
-           02 a-prenomN line i col 23     pic x(30) from prenomN.
-           02 a-datePermisN line i col 36 pic 9(8) from datePermisN.
+           02 a-prenomN line i col 39     pic x(30) from prenomN.
+           02 a-datePermisN line i col 69 pic 9999/99/99
+              from datePermisN.
 
        01 a-plg-message-utilisateur.
            02 line 20 col 1 value 'Appuyez sur ENTREE pour continuer.'.
