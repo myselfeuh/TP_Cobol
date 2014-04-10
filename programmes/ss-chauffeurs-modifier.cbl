@@ -21,6 +21,7 @@
        working-storage section.
        01 FChaufNouvStatus         pic x(2).
        01 i                        pic 9(2).
+       01 type-formulaire          pic 9.
        01 choix-action             pic 9.
        01 quitter                  pic 9.
        01 nom-chauf                pic x(30).
@@ -31,6 +32,8 @@
        01 nv-date-chauf            pic 9(8).
 
        screen section.
+
+      *----- Titres -----
        01 a-plg-titre-global.
            02 blank screen.
            02 line 1 col 10 value '- Gestion des chauffeurs -'.
@@ -44,7 +47,7 @@
            02 blank screen.
            02 line 1 col 10 value '- Supprime un chauffeur -'.
 
-
+      *----- Menu -----
        01 a-plg-fonctionnalites.
            02 line 3 col 2 value '1: Ajouter un chauffeur'.
            02 line 4 col 2 value '2: Modifier un chauffeur'.
@@ -62,29 +65,36 @@
            02 line 4 col 2 value 'Nom du chauffeur: '.
            02 s-nom-chauf pic x(30) to nom-chauf.
 
-       01 s-plg-formulaire-chauffeur-r.
+      * --------- Formulaire -----------
+       01 s-plg-form-nv-nom-r.
            02 line 3 col 2 value 'Nouveau nom: '.
            02 s-nv-nom-chauf pic x(30) to nv-nom-chauf required.
+       01 s-plg-form-nv-prenom-r.
            02 line 4 col 2 value 'Nouveau prenom: '.
            02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf required.
+       01 s-plg-form-nv-datePermis-r.
            02 line 5 col 2 value 'Nouvelle date de permis: '.
            02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf required.
 
-
-       01 s-plg-formulaire-chauffeur.
+       01 s-plg-form-nv-nom.
            02 line 3 col 2 value 'Nouveau nom: '.
            02 s-nv-nom-chauf pic x(30) to nv-nom-chauf.
+       01 s-plg-form-nv-prenom.
            02 line 4 col 2 value 'Nouveau prenom: '.
            02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf.
+       01 s-plg-form-nv-datePermis.
            02 line 5 col 2 value 'Nouvelle date de permis: '.
            02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf.
 
+      *------ Structure d'affichage de donnée -------
        01 a-plg-chauffeur-data.
            02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
            02 a-nomN line i col 8         pic x(30) from nomN.
            02 a-prenomN line i col 23     pic x(30) from prenomN.
-           02 a-datePermisN line i col 36 pic 9(8) from datePermisN.
+           02 a-datePermisN line i col 36 pic 9999/99/99
+               from datePermisN.
 
+      *------ Messages utilisateur ------
        01 a-plg-efface-ecran.
            02 blank screen.
        01 a-plg-message-choix-invalide.
@@ -112,6 +122,7 @@
        display a-plg-fonctionnalites
 
        move 0 to quitter
+       move 0 to type-formulaire
 
        perform until (quitter = 1)
            perform REINITIALISER
@@ -142,8 +153,8 @@
            perform REINITIALISER
            display a-plg-titre-ajoute
 
-           display s-plg-formulaire-chauffeur-r
-           accept s-plg-formulaire-chauffeur-r
+           move 1 to type-formulaire
+           perform FORMULAIRE-CHAUFFEUR
 
            move 9999 to numChaufN
            start FChaufNouv key < numChaufN
@@ -155,8 +166,8 @@
                    compute numChaufN = numChaufN + 1
            end-read
 
-           move nv-nom-chauf to nomN
-           move nv-prenom-chauf to prenomN
+           move function upper-case(nv-nom-chauf) to nomN
+           move function upper-case(nv-prenom-chauf) to prenomN
            move nv-date-chauf to datePermisN
 
            write ChaufNouv
@@ -175,21 +186,27 @@
 
            perform RECHERCHE-CHAUFFEUR
 
+           move id-chauf to numChaufN
+           start FChaufNouv key = numChaufN
+
            read FChaufNouv
            invalid key
                display a-plg-chauffeur-introuvable
            not invalid key
-               display s-plg-formulaire-chauffeur
-               accept s-plg-formulaire-chauffeur
+               move 0 to type-formulaire
+
+               perform FORMULAIRE-CHAUFFEUR
 
                if nv-nom-chauf not = spaces and low-value then
-               move nv-nom-chauf to nomN
+                   move function upper-case(nv-nom-chauf)
+                       to nomN
                end-if
                if nv-prenom-chauf not = spaces and low-value then
-               move nv-prenom-chauf to prenomN
+                   move function upper-case(nv-prenom-chauf)
+                       to prenomN
                end-if
-               if nv-date-chauf not = spaces and low-value then
-               move nv-date-chauf to datePermisN
+               if nv-date-chauf not = zeros and low-value then
+                   move nv-date-chauf to datePermisN
                end-if
 
                rewrite ChaufNouv
@@ -209,6 +226,9 @@
 
            perform RECHERCHE-CHAUFFEUR
 
+           move id-chauf to numChaufN
+           start FChaufNouv key = numChaufN
+
            delete FChaufNouv
            invalid key
                display a-plg-modif-erreur
@@ -220,27 +240,25 @@
        .
 
        RECHERCHE-CHAUFFEUR.
-           move 0 to id-chauf
-           move ' ' to nom-chauf
-
            display s-plg-recherche-id
-           display s-plg-recherche-nom
-
            accept s-plg-recherche-id
-           accept s-plg-recherche-nom
+       .
 
-           if id-chauf not = 0000 and nom-chauf not = ' ' then
-               display a-plg-champs-exclusifs
-           else if id-chauf = 0 and nom-chauf = ' ' then
-               display a-plg-champs-vide
+       FORMULAIRE-CHAUFFEUR.
+           if type-formulaire = 1 then
+               display s-plg-form-nv-nom-r
+               accept s-plg-form-nv-nom-r
+               display s-plg-form-nv-prenom-r
+               accept s-plg-form-nv-prenom-r
+               display s-plg-form-nv-datePermis-r
+               accept s-plg-form-nv-datePermis-r
            else
-               if id-chauf not = 0 then
-                   move id-chauf to numChaufN
-                   start FChaufNouv key = numChaufN
-               else
-                   move nom-chauf to nomN
-                   start FChaufNouv key = nomN
-               end-if
+               display s-plg-form-nv-nom
+               accept s-plg-form-nv-nom
+               display s-plg-form-nv-prenom
+               accept s-plg-form-nv-prenom
+               display s-plg-form-nv-datePermis
+               accept s-plg-form-nv-datePermis
            end-if
        .
 
