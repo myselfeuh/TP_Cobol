@@ -177,7 +177,9 @@
        LISTE-BUS.
       * a modifier en appelant le sous programme 'ss-bus-lister'
       * mais avec un parametre de date !
-           perform QUITTER
+           move 'ss-bus-lister-jour' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
        .
 
        TROUVER-CHAUFFEUR.
