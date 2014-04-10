@@ -58,6 +58,7 @@
            02 s-choix-action pic z to choix-action
            required.
 
+      *----- Recherche -----
        01 s-plg-recherche-id.
            02 line 3 col 2 value 'Id du chauffeur: '.
            02 s-id-chauf pic zzzz to id-chauf.

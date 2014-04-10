@@ -1,21 +1,50 @@
+       program-id ss-bus-lister-jour.
 
-
-       program-id. main.
+       input-output section.
+       file-control.
+           select FAffectations assign to "../ext/Affectation.dat"
+           organization is indexed
+           access mode is dynamic
+           record key is num-affect
+           alternate key is num-chauf with duplicates
+           alternate key is num-bus with duplicates
+           status fstatus.
 
        data division.
+       file section.
+       FD FAffectations.
+       01 enr-affectation.
+           02 num-affect   pic 9(4).
+           02 num-chauf    pic 9(4).
+           02 num-bus      pic 9(4).
+           02 date-debut   pic 9(8).
+           02 date-fin     pic 9(8).
+
+
        working-storage section.
-       01 choix pic 9 value 0.
-       01 mess-erreur  pic x(100).
-       01 choix-statut pic 9.
-           88 choix-ok value 1 false 0.
-       01 statut-edition pic xx value 'KO'.
-       01 nom-ssprog pic x(40).
+       01 FChaufNouvStatus         pic x(2).
 
        screen section.
-       01 a-plg-titre.
+
+      *----- Titres -----
+       01 a-plg-titre-global.
            02 blank screen.
-           02 line 1 col 10 value '- Chauffeurs, Bus et Compagnie -'.
-       01 a-plg-menu-ppal.
-           02 line 4 col 1 value        program-id ss-bus-lister-jour.
+           02 line 1 col 10 value '- Listing des bus disponibles -'.
+
+      *----- Recherche -----
+       01 s-plg-recherche-date.
+           02 line 4 col 2 value 'Choix de la date: '.
+           02 s-date-dispo pic 9999/99/99 to date-dispo.
+      *
+
+
+      *#################################################################
+      *######################### PROGRAMME #############################
+      *#################################################################
+
+       procedure division.
+
+       goback
+       .
 
        end program ss-bus-lister-jour.
