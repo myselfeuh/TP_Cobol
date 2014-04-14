@@ -77,14 +77,20 @@
            02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf required.
 
        01 s-plg-form-nv-nom.
-           02 line 3 col 2 value 'Nouveau nom: '.
+           02 line 4 col 2 value 'Ancien nom: '.
+           02 a-nom-chauf pic x(30) from nomN.
+           02 line 5 col 5 value 'Nouveau nom: '.
            02 s-nv-nom-chauf pic x(30) to nv-nom-chauf.
        01 s-plg-form-nv-prenom.
-           02 line 4 col 2 value 'Nouveau prenom: '.
+           02 line 7 col 2 value 'Ancien prenom: '.
+           02 a-prenom-chauf pic x(30) from prenomN.
+           02 line 8 col 5 value 'Nouveau prenom: '.
            02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf.
        01 s-plg-form-nv-datePermis.
-           02 line 5 col 2 value 'Nouvelle date de permis: '.
-           02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf.
+           02 line 10 col 2 value 'Ancienne date de permis: '.
+           02 a-date-chauf pic 9999/99/99 from datePermisN.
+           02 line 11 col 5 value 'Nouvelle date de permis: '.
+           02 s-nv-date-chauf pic 9999/99/99 to nv-date-chauf.
 
       *------ Structure d'affichage de donnée -------
        01 a-plg-chauffeur-data.
