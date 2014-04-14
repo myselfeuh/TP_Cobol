@@ -65,7 +65,7 @@
            02 line 4 col 2 value 'Nom du chauffeur: '.
            02 s-nom-chauf pic x(30) to nom-chauf.
 
-      * --------- Formulaire -----------
+      * --------- Formulaires -----------
        01 s-plg-form-nv-nom-r.
            02 line 3 col 2 value 'Nouveau nom: '.
            02 s-nv-nom-chauf pic x(30) to nv-nom-chauf required.
@@ -74,7 +74,7 @@
            02 s-nv-prenom-chauf pic x(30) to nv-prenom-chauf required.
        01 s-plg-form-nv-datePermis-r.
            02 line 5 col 2 value 'Nouvelle date de permis: '.
-           02 s-nv-date-chauf pic zzzzzzzz to nv-date-chauf required.
+           02 s-nv-date-chauf pic 9999/99/99 to nv-date-chauf required.
 
        01 s-plg-form-nv-nom.
            02 line 4 col 2 value 'Ancien nom: '.
@@ -93,12 +93,12 @@
            02 s-nv-date-chauf pic 9999/99/99 to nv-date-chauf.
 
       *------ Structure d'affichage de donnée -------
-       01 a-plg-chauffeur-data.
-           02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
-           02 a-nomN line i col 8         pic x(30) from nomN.
-           02 a-prenomN line i col 23     pic x(30) from prenomN.
-           02 a-datePermisN line i col 36 pic 9999/99/99
-               from datePermisN.
+      *01 a-plg-chauffeur-data.
+      *    02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
+      *    02 a-nomN line i col 8         pic x(30) from nomN.
+      *    02 a-prenomN line i col 23     pic x(30) from prenomN.
+      *    02 a-datePermisN line i col 36 pic 9999/99/99
+      *        from datePermisN.
 
       *------ Messages utilisateur ------
        01 a-plg-efface-ecran.
