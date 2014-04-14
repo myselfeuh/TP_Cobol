@@ -146,17 +146,10 @@
            perform with test after until (
                fin-fichier = 1 or
                Fstatus = 46 or
-               ( Fstatus = '00' and
-                 nomN not = function upper-case(nom-chauffeur) )
-           )
+               Fstatus = '00'
+            )
                read FChaufNouv next
                    at end
-                       if (nomN = function upper-case(nom-chauffeur)
-                       ) then
-                           display a-plg-chauffeur-data
-                           display a-plg-message-continuer
-                           stop ' '
-                       end-if
                        move 1 to fin-fichier
                    not at end
                        if (nomN = function upper-case(nom-chauffeur)
@@ -164,6 +157,8 @@
                            display a-plg-chauffeur-data
                            display a-plg-message-continuer
                            stop ' '
+                       else
+                           move 1 to fin-fichier
                        end-if
                end-read
                if (Fstatus not = '00'
