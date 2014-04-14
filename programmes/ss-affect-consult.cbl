@@ -109,6 +109,7 @@
                    display a-plg-status
                end-if
            end-if
+           close AFFECTATIONS
        goback
        .
 
