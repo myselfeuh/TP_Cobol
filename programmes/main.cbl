@@ -136,19 +136,11 @@
            display a-plg-titre
        .
 
-       MODIF-AFFECT.
+       AJ-MODIF-SUPPR-AFFECT.
       * a modifier en appelant le sous programme 'ss-affect-modif'
-           perform QUITTER
-       .
-
-       AJ-AFFECT.
-      * a modifier en appelant le sous programme 'ss-affect-aj'
-           perform QUITTER
-       .
-
-       SUPPR-AFFECT.
-      * a modifier en appelant le sous programme 'ss-affect-suppr'
-           perform QUITTER
+           move 'ss-affect-modif' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
        .
 
        AFFECTATIONS.
@@ -159,9 +151,7 @@
                accept s-plg-choix
                evaluate choix
                    when 1 perform CONSULT-AFFECT
-                   when 2 perform AJ-AFFECT
-                   when 3 perform MODIF-AFFECT
-                   when 4 perform SUPPR-AFFECT
+                   when 2 perform AJ-MODIF-SUPPR-AFFECT
                    when 9 perform MENU-PPAL
                    when other perform ERR-CHOIX
                end-evaluate
