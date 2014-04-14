@@ -38,26 +38,26 @@
        01 a-plg-titre.
            02 blank screen.
            02 line 1 col 10 value '- Chauffeurs, Bus et Compagnie -'.
-       01 a-plg-accueil.
-           02 line 3 col 1 value 'Salut, vous etes dans le '
-          & 'sous-programme ss-chauffeurs-lister.'.
        01 a-plg-titres-liste.
-           02 line 5 col 1 value 'Num affect'.
-           02 line 5 col 15 value 'Num chauf'.
-           02 line 5 col 25 value 'Num bus'.
-           02 line 5 col 35 value 'Date debut'.
-           02 line 5 col 46 value 'Date fin'.
+           02 line 4 col 1 value 'Num affect'.
+           02 line 4 col 15 value 'Num chauf'.
+           02 line 4 col 27 value 'Num bus'.
+           02 line 4 col 37 value 'Date debut'.
+           02 line 4 col 52 value 'Date fin'.
+           02 line 5 col 1 value
+           '----------------------------------------------------------'
+               &'---------------------'.
        01 a-plg-liste.
            02 line i col 1.
            02 s-num-affect pic 9(4) from num-affect.
            02 line i col 15.
            02 s-num-chauf pic 9(4) from num-chauf.
-           02 line i col 25.
+           02 line i col 27.
            02 s-num-bus pic 9(4) from num-bus.
-           02 line i col 35.
-           02 s-date-debut pic 9(8) from date-debut.
-           02 line i col 46.
-           02 s-date-fin pic 9(8) from date-fin.
+           02 line i col 37.
+           02 s-date-debut pic 9999/99/99 from date-debut.
+           02 line i col 52.
+           02 s-date-fin pic 9999/99/99 from date-fin.
        01 a-plg-continuer.
            02 line 22 col 1 value 'Appuyez sur une touche pour'
                & ' continuer...'.
@@ -74,7 +74,6 @@
 
        procedure division.
            display a-plg-titre
-           display a-plg-accueil
            open input AFFECTATIONS
            if fstatus not = '00' then
                move 'Erreur d''ouverture du fichier...' to mess-erreur
