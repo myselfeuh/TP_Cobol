@@ -159,15 +159,13 @@
        .
 
        LISTE-CHAUFFEURS-DATE.
-      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
-      * mais avec un parametre de date !
-           perform QUITTER
+           move 'ss-chauffeurs-lister-date' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
        .
 
        LISTE-BUS.
-      * a modifier en appelant le sous programme 'ss-bus-lister'
-      * mais avec un parametre de date !
-           move 'ss-bus-lister-jour' to nom-ssprog
+           move 'ss-bus-lister-date' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
