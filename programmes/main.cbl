@@ -6,7 +6,6 @@
        01 mess-erreur  pic x(100).
        01 choix-statut pic 9.
            88 choix-ok value 1 false 0.
-       01 statut-edition pic xx value 'KO'.
        01 nom-ssprog pic x(40).
 
        screen section.
@@ -44,14 +43,6 @@
            02 line 9 col 1 value '4-Trouver la(les) date(s) '
                &'d''affectation d''un bus donne a un chauffeur donne'.
            02 line 11 col 1 value '9-Retour au menu principal'.
-       01 a-plg-recapitulatif.
-           02 line 4 col 1 value 'Edition du recapitulatif...'.
-           02 line 6 col 1 value 'Statut de l''edition : '.
-           02 line 6 col 23.
-           02 a-statut-edition pic xx from statut-edition.
-           02 line 8 col 1 value '1-Recommencer l''edition  du '
-               &'recapitulatif'.
-           02 line 9 col 1 value '9-Retour au menu principal'.
 
        01 s-plg-choix.
            02 line 20 col 1 value 'Entrez votre choix : '.
@@ -92,22 +83,18 @@
        .
 
        FICHE-CHAUFFEUR.
-      * a modifier en appelant le sous programme
-      * 'ss-chauffeurs-afficher'
            move 'ss-chauffeurs-rechercher' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
 
        MODIF-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-chauffeurs-modif'
            move 'ss-chauffeurs-modifier' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
 
        LISTE-CHAUFFEURS.
-      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
            move 'ss-chauffeurs-lister' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
@@ -130,14 +117,12 @@
        .
 
        CONSULT-AFFECT.
-      * a modifier en appelant le sous programme 'ss-affect-consult'
            move 'ss-affect-consult' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
        .
 
        AJ-MODIF-SUPPR-AFFECT.
-      * a modifier en appelant le sous programme 'ss-affect-modif'
            move 'ss-affect-modif' to nom-ssprog
            call nom-ssprog
            display a-plg-titre
@@ -173,11 +158,13 @@
        TROUVER-CHAUFFEUR.
            move 'ss-question-chauffeur' to nom-ssprog
            call nom-ssprog
+           display a-plg-titre
        .
 
        TROUVER-DATE.
            move 'ss-question-date' to nom-ssprog
            call nom-ssprog
+           display a-plg-titre
        .
 
        DISPONIBILITES.
@@ -198,20 +185,9 @@
        .
 
        RECAPITULATIF.
+           move 'ss-recap' to nom-ssprog
+           call nom-ssprog
            display a-plg-titre
-      * appeler le sous-programme 'ss-recap' et stocker le statut dans
-      * la variable 'statut-edition'
-           display a-plg-recapitulatif
-
-           perform with test after until choix-ok
-               display s-plg-choix
-               accept s-plg-choix
-               evaluate choix
-                   when 1 perform RECAPITULATIF
-                   when 9 perform MENU-PPAL
-                   when other perform ERR-CHOIX
-               end-evaluate
-           end-perform
        .
 
        QUITTER.
