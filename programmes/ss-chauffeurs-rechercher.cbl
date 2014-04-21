@@ -122,12 +122,12 @@
            display a-plg-titre-colonne
 
            start FChaufNouv key = numChaufN
-           read FChaufNouv
                invalid key
                    display a-plg-mess-no-result
                not invalid key
+                   read FChaufNouv
                    display a-plg-chauffeur-data
-           end-read
+           end-start
            display a-plg-message-continuer
            stop ' '
        .
