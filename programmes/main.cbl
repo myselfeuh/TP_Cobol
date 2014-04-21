@@ -171,15 +171,16 @@
        .
 
        TROUVER-CHAUFFEUR.
-      * a modifier en appelant le sous programme 'ss-chauffeurs-lister'
-      * mais avec un parametre de date et un parametre de bus !
+           move 'ss-question-trouver-chauffeur' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
            perform QUITTER
        .
 
        TROUVER-DATE.
-      * a modifier en appelant le sous programme 'ss-trouver-date'
-      * avec un parametre de chauffeur et un parametre de bus
-           perform QUITTER
+           move 'ss-question-trouver-date' to nom-ssprog
+           call nom-ssprog
+           display a-plg-titre
        .
 
        DISPONIBILITES.
