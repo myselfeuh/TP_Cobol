@@ -40,7 +40,7 @@
        01 FChaufNouvStatus      pic x(2).
        01 date-dispo            pic 9(8).
 
-       01 i                     pic 9.
+       01 i                     pic 99.
        01 quitter               pic x.
        01 fin-affect-fichier    pic x.
        01 fin-chauff-fichier    pic x.
@@ -73,7 +73,9 @@
            02 a-nomN line i col 8         pic x(30) from nomN.
            02 a-prenomN line i col 23     pic x(30) from prenomN.
 
-      *------ Message d'erreur ------
+      *------ Messages pour l'utilisateur ------
+       01 a-plg-message-continuer.
+           02 line 20 col 1 value 'Appuyez sur ENTREE pour continuer.'.
        01 a-error-Affect-file-open.
            02 blank screen.
            02 line 3 col 2 value 'Erreur Affectations.dat - status: '.
@@ -106,7 +108,7 @@
 
            display a-plg-titre-global
 
-           perform REINITIALISER
+      *    perform REINITIALISER
            display a-plg-separateur
            display s-plg-rechercher-date
            accept s-plg-rechercher-date
@@ -116,6 +118,7 @@
                display a-plg-aucun-resultat
            end-if
 
+           display a-plg-message-continuer
            stop ' '
 
        close FAffectations
@@ -125,10 +128,6 @@
        .
 
       *#################################################################
-
-       REINITIALISER.
-
-       .
 
        ITERE-CHAUFFEURS.
            move 0 to fin-chauff-fichier
@@ -156,22 +155,23 @@
            move NumChaufN to num-chauf
            start Faffectations key = num-chauf
 
-           perform with test after until (fin-affect-fichier = 1)
-               read FAffectations next
-                   at end
-                       move 1 to fin-affect-fichier
-                   not at end
-                       if NumChaufN = num-chauf
-                           if date-dispo > date-debut
-                           and date-dispo < date-fin then
-                               move 0 to chauffeur-disponible
+           if FAffectStatus = '00' then
+               perform with test after until (fin-affect-fichier = 1)
+                   read FAffectations next
+                       at end
+                           move 1 to fin-affect-fichier
+                       not at end
+                           if ( NumChaufN = num-chauf
+                               and date-dispo > date-debut
+                               and date-dispo < date-fin ) then
+                                   move 0 to chauffeur-disponible
+                           else
+                               move 1 TO fin-affect-fichier
                            end-if
-                       else
-                           move 1 TO fin-affect-fichier
-                       end-if
 
-               end-read
-           end-perform
+                   end-read
+               end-perform
+           end-if
        .
 
        end program ss-chauffeurs-lister-date.
