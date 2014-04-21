@@ -1,4 +1,4 @@
-       program-id. ss-question-trouver-chauffeur.
+       program-id. ss-question-chauffeur.
 
        input-output section.
        file-control.
@@ -6,7 +6,7 @@
                organization is indexed
                access mode is dynamic
                    record key is fa-num-affect
-                   alternate key is fa-num-chauf with duplicates
+                   alternate key is fa-num-chauff with duplicates
                    alternate key is fa-num-bus with duplicates
                status fa-status.
 
@@ -66,7 +66,7 @@
            required.
        01 s-plg-date.
            02 line 4 col 2 value "Date d'affectation: ".
-           02 s-date-affect pic 9999/99/99 to date-affect
+           02 s-date-affect pic 99999999 to date-affect
            required.
        01 a-plg-separateur.
            02 line 6 col 1 value
@@ -139,6 +139,7 @@
            end-if
 
            stop ' '
+           display a-plg-efface-ecran
 
        close FChauffeurs
        close FAffectations
@@ -171,6 +172,14 @@
        end-perform
        .
 
+      * DONNEES DE TEST
+      * affect chauff          bus   debut    fin
+      * 0001   0001 mozzati    0001  20120112 20120315
+      * 0002   0001 mozzati    0009  20120401 20120620
+      * 0003   0001 mozzati    0005  20120630 20120930
+      * 0005   0002 batho      0007  20120126 20120405
+      * 0006   0002 batho      0008  20120426 20120823
+
        RECHERCHE-CHAUFFEUR.
            move 1 to aucun-resultat
            move 0 to fin-fc
@@ -185,6 +194,8 @@
                    not at end
                        if fc-num-chauff = fa-num-chauff
                            display a-plg-chauffeur-data
+                           compute i = i + 1
+                           move 0 to aucun-resultat
                        else
                            move 1 TO fin-fc
                        end-if
@@ -197,4 +208,4 @@
            display a-plg-titre-global
        .
 
-       end program ss-question-trouver-chauffeur.
+       end program ss-question-chauffeur.

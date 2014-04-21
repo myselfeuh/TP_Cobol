@@ -26,39 +26,49 @@
 
        working-storage section.
        01 fa-status                pic x(2).
-       01 fc-status                pic x(2).
        01 i                        pic 9(2).
-       01 fin-fichier              pic 9.
+       01 fa-fin                   pic 9.
        01 aucun-resultat           pic 9.
 
        01 num-bus                  pic 9(4).
        01 date-affect              pic x(30).
-       01 num-chauff               pic 9(4).
+       01 num-chauf               pic 9(4).
 
       *-------------------------- TITRE --------------------------------
 
        screen section.
        01 a-plg-titre-global.
            02 blank screen.
-           02 line 1 col 10 value
+           02 line 1 col 2 value
                "- Rechercher la date d'affectation d'un bus"
                    &" donné pour un chauffeur donné -".
 
       *-------------------------- SAISIE -------------------------------
 
-       01 s-plg-num-bus.
-           02 line 3 col 2 value "Id du bus: ".
-           02 s-num-bus pic zzzz to num-bus
+       01 s-plg-num-chauf.
+           02 line 3 col 2 value "Id du chauffeur: ".
+           02 s-num-chauf pic zzzz to num-chauf
            required.
-       01 s-plg-num-chauff.
-           02 line 4 col 2 value "Id du chauffeur: ".
-           02 s-num-chauff pic zzzz to num-chauff
+       01 s-plg-num-bus.
+           02 line 4 col 2 value "Id du bus: ".
+           02 s-num-bus pic zzzz to num-bus
            required.
        01 a-plg-separateur.
            02 line 6 col 1 value
            '----------------------------------------------------------'
                &'---------------------'.
 
+      *-------------------------- RESULTATS ----------------------------
+
+       01 a-plg-date-colonnes.
+           02 line 5 col 2 value "Date d'affectation: ".
+           02 line 6 col 1 value
+           '----------------------------------------------------------'
+               &'---------------------'.
+
+       01 a-plg-date-data.
+           02 a-fa-date-debut line i col 2 pic 9999/99/99
+               from fa-date-debut.
 
       *---------------------- MESSAGES & ERREURS -----------------------
 
@@ -88,24 +98,44 @@
            move 1 to aucun-resultat
 
            perform REINITIALISER
+           display s-plg-num-chauf
+           accept s-plg-num-chauf
            display s-plg-num-bus
            accept s-plg-num-bus
            display a-plg-separateur
 
-           perform ITERE-BUS
+           perform FILTRE-AFFECTATIONS
            if aucun-resultat = 1 then
                display a-plg-aucun-resultat
            end-if
 
            stop ' '
+           display a-plg-efface-ecran
 
        close FAffectations
 
        goback
        .
 
-       ITERE-BUS
+       FILTRE-AFFECTATIONS.
 
+       move 0 to fa-fin
+       move 0 to fa-num-affect
+       start FAffectations key >= fa-num-affect
+
+       perform with test after until (fa-fin = 1)
+           read FAffectations next
+               at end
+                   move 1 to fa-fin
+               not at end
+                   if num-chauf = fa-num-chauf
+                   and num-bus = fa-num-bus then
+                       display a-plg-date-data
+                       move 0 to aucun-resultat
+                       compute i = i + 1
+                   end-if
+           end-read
+       end-perform
        .
 
        REINITIALISER.
@@ -114,5 +144,3 @@
        .
 
        end program ss-question-trouver-date.
-
-

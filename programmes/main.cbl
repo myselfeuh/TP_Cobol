@@ -173,14 +173,11 @@
        TROUVER-CHAUFFEUR.
            move 'ss-question-chauffeur' to nom-ssprog
            call nom-ssprog
-           display a-plg-titre
-           perform QUITTER
        .
 
        TROUVER-DATE.
            move 'ss-question-date' to nom-ssprog
            call nom-ssprog
-           display a-plg-titre
        .
 
        DISPONIBILITES.
