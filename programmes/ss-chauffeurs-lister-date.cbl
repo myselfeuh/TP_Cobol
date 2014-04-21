@@ -108,7 +108,6 @@
 
            display a-plg-titre-global
 
-      *    perform REINITIALISER
            display a-plg-separateur
            display s-plg-rechercher-date
            accept s-plg-rechercher-date
