@@ -76,16 +76,16 @@
            02 a-fb-modele  line i col 30 pic x(20) from fb-modele.
            02 a-fb-kms     line i col 50 pic 9(6)  from fb-kms.
 
+       01 a-plg-bus-titres-colonnes.
+           02 line 5 col 2  value 'Id'.
+           02 line 5 col 8  value 'Marque'.
+           02 line 5 col 20 value 'Places'.
+           02 line 5 col 30 value 'Modele'.
+           02 line 5 col 50 value 'Kms'.
 
-       01 a-plg-bus-header.
-           02 line 5 col 2  value 'NUM:'.
-           02 line 5 col 8  value 'MARQUE:'.
-           02 line 5 col 20 value 'PLACES:'.
-           02 line 5 col 30 value 'MODELE:'.
-           02 line 5 col 50 value 'KMS:'.
-
-
-      *------ Message d'erreur ------
+      *------ Messages pour l'utilisateur ------
+       01 a-plg-message-continuer.
+           02 line 20 col 1 value 'Appuyez sur ENTREE pour continuer.'.
        01 a-error-affect-file-open.
            02 blank screen.
            02 line 3 col 2 value 'Erreur Affectations.dat - status: '.
@@ -116,18 +116,21 @@
            move 1 to aucun-resultat
            move 0 to fb-numero
 
-           perform REINITIALISER
            move 4 to j
            display a-plg-separateur
            display s-plg-rechercher-date
            accept s-plg-rechercher-date
-           display a-plg-bus-header
 
            perform ITERE-BUS
            if aucun-resultat = 1 then
                display a-plg-aucun-resultat
+           else
+               display a-plg-bus-titres-colonnes
+               move 6 to j
+               display a-plg-separateur
            end-if
 
+           display a-plg-message-continuer
            stop ' '
 
        close FAffectations
@@ -137,10 +140,6 @@
        .
 
       *#################################################################
-
-       REINITIALISER.
-
-       .
 
        ITERE-BUS.
            move 0 to fin-bus-fichier

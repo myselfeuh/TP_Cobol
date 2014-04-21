@@ -41,6 +41,7 @@
        01 date-dispo            pic 9(8).
 
        01 i                     pic 99.
+       01 j                     pic 99.
        01 quitter               pic x.
        01 fin-affect-fichier    pic x.
        01 fin-chauff-fichier    pic x.
@@ -63,15 +64,21 @@
            02 s-date-dispo pic 9999/99/99 to date-dispo.
 
       *------ Structure d'affichage de donnée -------
+       01 a-plg-titre-colonne.
+           02 line 5 col 2 value 'Id'.
+           02 line 5 col 8 value 'Nom'.
+           02 line 5 col 39 value 'Prenom'.
+           02 line 5 col 69 value 'Date permis'.
        01 a-plg-separateur.
-           02 line 4 col 1 value
+           02 line j col 1 value
            '----------------------------------------------------------'
                &'---------------------'.
 
        01 a-plg-chauffeur-data.
            02 a-numChaufN line i col 2    pic 9(4) from numChaufN.
            02 a-nomN line i col 8         pic x(30) from nomN.
-           02 a-prenomN line i col 23     pic x(30) from prenomN.
+           02 a-prenomN line i col 39     pic x(30) from prenomN.
+           02 a-date-permis line i col 69 pic x(30) from datePermisN.
 
       *------ Messages pour l'utilisateur ------
        01 a-plg-message-continuer.
@@ -103,11 +110,11 @@
            display a-error-Affect-file-open
        else
            move 1 to aucun-resultat
-           move 5 to i
+           move 7 to i
            move 0 to numChaufN
 
            display a-plg-titre-global
-
+           move 04 to j
            display a-plg-separateur
            display s-plg-rechercher-date
            accept s-plg-rechercher-date
@@ -115,6 +122,10 @@
 
            if aucun-resultat = 1 then
                display a-plg-aucun-resultat
+           else
+            display a-plg-titre-colonne
+            move 6 to j
+            display a-plg-separateur
            end-if
 
            display a-plg-message-continuer
