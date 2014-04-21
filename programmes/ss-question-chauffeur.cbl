@@ -41,13 +41,13 @@
        working-storage section.
        01 fa-status                pic x(2).
        01 fc-status                pic x(2).
-       01 i                        pic 9(2).
+       01 i                        pic 99.
+       01 j                        pic 99.
        01 fin-fa                   pic 9.
        01 fin-fc                   pic 9.
        01 aucun-resultat           pic 9.
-
        01 num-bus                  pic 9(4).
-       01 date-affect              pic x(30).
+       01 date-affect              pic 9(8).
        01 num-chauff               pic 9(4).
 
       *-------------------------- TITRE --------------------------------
@@ -56,7 +56,7 @@
        01 a-plg-titre-global.
            02 blank screen.
            02 line 1 col 10 value
-         "- Rechercher un chauffeur via un bus et une date donnée -".
+         "- Rechercher un chauffeur via un bus et une date donnee -".
 
       *-------------------------- SAISIE -------------------------------
 
@@ -66,10 +66,10 @@
            required.
        01 s-plg-date.
            02 line 4 col 2 value "Date d'affectation: ".
-           02 s-date-affect pic 99999999 to date-affect
+           02 s-date-affect pic 9999/99/99 to date-affect
            required.
        01 a-plg-separateur.
-           02 line 6 col 1 value
+           02 line j col 1 value
            '----------------------------------------------------------'
                &'---------------------'.
 
@@ -77,13 +77,10 @@
       *-------------------------- RESULTATS ----------------------------
 
        01 a-plg-chauffeurs-colonnes.
-           02 line 5 col 2 value 'Id'.
-           02 line 5 col 8 value 'Nom'.
-           02 line 5 col 39 value 'Prenom'.
-           02 line 5 col 69 value 'Date permis'.
-           02 line 6 col 1 value
-           '----------------------------------------------------------'
-               &'---------------------'.
+           02 line 6 col 2 value 'Id'.
+           02 line 6 col 8 value 'Nom'.
+           02 line 6 col 39 value 'Prenom'.
+           02 line 6 col 69 value 'Date permis'.
 
        01 a-plg-chauffeur-data.
            02 a-fc-num-chauff line i col 2  pic 9(4) from fc-num-chauff.
@@ -131,16 +128,21 @@
            accept s-plg-num-bus
            display s-plg-date
            accept s-plg-date
+           move 5 to j
            display a-plg-separateur
 
            perform FILTRE-AFFECTATIONS
            if aucun-resultat = 1 then
                display a-plg-aucun-resultat
+           else
+               display a-plg-chauffeurs-colonnes
+               move 07 to j
+               display a-plg-separateur
            end-if
 
            stop ' '
            display a-plg-efface-ecran
-
+       end-if
        close FChauffeurs
        close FAffectations
 
@@ -151,25 +153,25 @@
       * parcourir toutes les affectations
       * si la clef courante = param-bus et date courante > date-debut et
       * date courante < date-fin alors
-
       * recherche sur les chauffeurs key = resultat trouvé précédemment
 
        move 0 to fin-fa
        move 0 to fa-num-affect
        start FAffectations key >= fa-num-affect
-
-       perform with test after until (fin-fa = 1)
-           read FAffectations next
-               at end
-                   move 1 to fin-fa
-               not at end
-                   if date-affect > fa-date-debut
-                   and date-affect < fa-date-fin
-                   and num-bus = fa-num-bus then
-                       perform RECHERCHE-CHAUFFEUR
-                   end-if
-           end-read
-       end-perform
+       if fa-status = '00' then
+           perform with test after until (fin-fa = 1)
+               read FAffectations next
+                   at end
+                       move 1 to fin-fa
+                   not at end
+                       if date-affect > fa-date-debut
+                       and date-affect < fa-date-fin
+                       and num-bus = fa-num-bus then
+                           perform RECHERCHE-CHAUFFEUR
+                       end-if
+               end-read
+           end-perform
+       end-if
        .
 
       * DONNEES DE TEST
