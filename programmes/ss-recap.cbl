@@ -68,9 +68,12 @@
        01 fin-fc           pic 9.
        01 fin-fb           pic 9.
        01 i                pic 9(2).
+       01 nb-jrs           pic 9(4).
+
        01 mess-erreur      pic x(100).
        01 statut-edition   pic xxx value 'NON'.
        01 prg-err-name     pic x(30) value 'none'.
+       01 prg-err-status   pic x(2).
        01 choix            pic 9 value 0.
        01 choix-statut     pic 9.
            88 choix-ok value 1 false 0.
@@ -94,10 +97,12 @@
       *---------------------- MESSAGES & ERREURS -----------------------
        01 a-plg-confirmation.
            02 line 14 col 3 value 'Fichier sauvegarde avec succes !'.
-       01 a-error-open.
-           02 line 15 col 1 value "Erreur lors de l'ouverture de : ".
-           02 line 15 col 35.
+       01 a-error-open-read.
+           02 line 15 col 1 value "Erreur dans le fichier : ".
+           02 line 15 col 27.
            02 a-prg-name pic x(30) from prg-err-name.
+           02 line 15 col 37.
+           02 a-prg-status pic x(30) from prg-err-status.
        01 a-plg-erreur.
            02 line 22 col 1.
            02 a-message pic x(100) from mess-erreur.
@@ -129,40 +134,55 @@
        open input FChauffeurs
        if fc-status not = '00' then
            move 'FChauffeurs' to prg-err-name
-           display a-error-open
+           move fc-status to prg-err-status
+           display a-error-open-read
        end-if
 
        open input FAffectations
        if fa-status not = '00' then
            move 'FAffectations' to prg-err-name
-           display a-error-open
+           move fa-status to prg-err-status
+           display a-error-open-read
        end-if
 
        open input FBus
-       if fa-status not = '00' then
+       if fb-status not = '00' then
            move 'FBus' to prg-err-name
-           display a-error-open
+           move fb-status to prg-err-status
+           display a-error-open-read
        end-if
 
        open output FRecap
        if fr-status not = '00' then
           move 'Frecap' to prg-err-name
-          display a-error-open
+          move fr-status to prg-err-status
+          display a-error-open-read
        end-if
 
       *--- initialisation des titres du fichier recap ---
        move '       ----- Fichier recapitulatif -----' to contenu-ligne
        write Ligne
+       move ' ' to contenu-ligne
        move '.' to contenu-ligne
        write Ligne
-       move 'Numero bus | Nombre de places ' to contenu-ligne
+       move 'Numero bus |       Nombre de places ' to contenu-ligne
        write Ligne
+       move ' ' to contenu-ligne
+       move '.        Date debut   | Date fin   | NumChauffeur'
+           to contenu-ligne
+       write Ligne
+       move ' ' to contenu-ligne
+       move '.                                        '
+           &'Nb total jrs service' to contenu-ligne
+       write Ligne
+       move ' ' to contenu-ligne
        move '-------------------------------------------------------'
                &'----------' to contenu-ligne
        write Ligne
 
 
       *--- lecture des fichiers ---
+      *    --- debut FBus ---
        move 0 to fb-numero
        move 0 to fin-fb
        start FBus key >= fb-numero
@@ -173,17 +193,68 @@
                        move 1 to fin-fb
                    not at end
                        move ' ' to contenu-ligne
-                       string fb-numero '         ' fb-nbplace
+                       string fb-numero '                ' fb-nbplace
                            into contenu-ligne
                        write Ligne
+
+      *                --- debut FAffectations ---
+                       move 0 to nb-jrs
+                       move 0 to fa-num-affect
+                       move 0 to fin-fa
+                       start FAffectations key >= fa-num-affect
+                       if fa-status = '00' then
+                           perform with test after until (fin-fa = 1)
+                               read FAffectations next
+                                   at end
+                                       move 1 to fin-fa
+                                   not at end
+                                   if (fb-numero = fa-num-bus) then
+                                       perform CALCUL-NB-JOURS
+                                       move ' ' to contenu-ligne
+                                       string '.        ' fa-date-debut
+                                           '         ' fa-date-fin
+                                           '         ' fa-num-chauff
+                                           into contenu-ligne
+                                       write Ligne
+                                   end-if
+                               end-read
+                           end-perform
+                           move ' ' to contenu-ligne
+                           string '.                          '
+                               '                  ' nb-jrs
+                               into contenu-ligne
+                           write Ligne
+                           move ' ' to contenu-ligne
+                           move '.' to contenu-ligne
+                           write Ligne
+                       else
+                           move 'FAffectations' to prg-err-name
+                           move fa-status to prg-err-status
+                           display a-error-open-read
+                       end-if
+      *                --- fin FAffectations ---
+
+                   end-read
            end-perform
            display a-plg-confirmation
            move 'OUI' to statut-edition
+       else
+           move 'FBus' to prg-err-name
+           move fb-status to prg-err-status
+           display a-error-open-read
        end-if
+      *    --- fin FBus ---
+
        close FRecap
        close FChauffeurs
        close FAffectations
        close FBus
+       .
+
+       CALCUL-NB-JOURS.
+           compute nb-jrs = nb-jrs +
+               (function INTEGER-OF-DATE (fa-date-fin) -
+                function INTEGER-OF-DATE (fa-date-debut) )
        .
 
        ERR-CHOIX.
